@@ -1,0 +1,2 @@
+uv run uvicorn alpha_harness.main:app --port 8000
+pnpm run dev 
