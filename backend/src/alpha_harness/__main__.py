@@ -12,8 +12,8 @@ import uvicorn
 from . import updates
 from .window import open_window
 
-HOST = "127.0.0.1"
-PORT = 8000
+HOST = os.environ.get("ALPHA_HARNESS_HOST", "127.0.0.1")
+PORT = int(os.environ.get("ALPHA_HARNESS_PORT", "8000"))
 #: A port another program holds: POSIX's number, and Windows' own (WSAEADDRINUSE).
 PORT_TAKEN = frozenset({errno.EADDRINUSE, 10048})
 #: How long a start straight after an update waits for the page that asked for it to return.
@@ -52,10 +52,11 @@ async def _serve() -> str | None:
         # Taken on every start, so a desktop window's update never leaves it for a later one.
         reloads = updates.page_reloads()
         # Straight after an update the page that asked for it reloads onto this one by itself.
-        if not os.environ.get(updates.SHELL_VARIABLE) and not (
+        if not _headless() and not os.environ.get(updates.SHELL_VARIABLE) and not (
             reloads and await _page_returns(app)
         ):
-            open_window(f"http://{HOST}:{PORT}")
+            browser_host = "127.0.0.1" if HOST == "0.0.0.0" else HOST
+            open_window(f"http://{browser_host}:{PORT}")
     await serving
     if watching is not None:
         watching.cancel()
@@ -104,6 +105,15 @@ async def _page_returns(app: Any) -> bool:
     except TimeoutError:
         return False
     return True
+
+
+def _headless() -> bool:
+    """Whether the app is running without a desktop/browser session, e.g. Docker."""
+    if os.environ.get("ALPHA_HARNESS_HEADLESS", "").lower() in {"1", "true", "yes", "on"}:
+        return True
+    if os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY"):
+        return False
+    return os.environ.get("container") is not None or os.environ.get("KUBERNETES_SERVICE_HOST") is not None
 
 
 def _launched() -> bool:

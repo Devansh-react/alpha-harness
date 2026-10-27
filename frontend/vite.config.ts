@@ -5,7 +5,7 @@ import { defineConfig } from 'vite'
 
 // The backend runs as a separate process. Proxying /api and /ws in dev means the
 // frontend never needs CORS or credentials of its own.
-const BACKEND = 'http://127.0.0.1:8000'
+const BACKEND = process.env['ALPHA_HARNESS_BACKEND'] ?? 'http://127.0.0.1:8000'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],

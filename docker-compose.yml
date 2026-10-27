@@ -1,0 +1,14 @@
+services:
+  alpha-harness:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: alpha-harness:latest
+    container_name: alpha-harness
+    environment:
+      ALPHA_HARNESS_HOST: 0.0.0.0
+      ALPHA_HARNESS_PORT: "8000"
+      ALPHA_HARNESS_HEADLESS: "1"
+    ports:
+      - "8000:8000"
+    restart: unless-stopped

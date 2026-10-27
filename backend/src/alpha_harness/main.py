@@ -139,7 +139,10 @@ def create_app() -> FastAPI:
 
     # DNS rebinding: a page whose hostname resolves to 127.0.0.1 is "same-origin" to the
     # browser, so the header checks below pass. Its Host header still names that hostname.
-    app.add_middleware(TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1"])
+    app.add_middleware(
+        TrustedHostMiddleware,
+        allowed_hosts=["localhost", "127.0.0.1", "0.0.0.0", "[::1]"],
+    )
 
     @app.middleware("http")
     async def require_client_header(request: Request, call_next: Any) -> Any:

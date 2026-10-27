@@ -1,2 +1,8 @@
-uv run uvicorn alpha_harness.main:app --port 8000
-pnpm run dev 
+# Terminal 1, from the repository root:
+Set-Location backend
+uv run uvicorn alpha_harness.main:app --reload --port 8000
+
+# Terminal 2, from the repository root:
+Set-Location frontend
+$env:ALPHA_HARNESS_BACKEND = 'http://127.0.0.1:8001'
+pnpm run dev

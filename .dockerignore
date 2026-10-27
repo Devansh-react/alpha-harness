@@ -1,0 +1,24 @@
+# VCS and local state
+.git
+.gitignore
+.github
+**/.DS_Store
+
+# Python
+**/__pycache__
+**/.venv
+**/.mypy_cache
+**/.pytest_cache
+**/.ruff_cache
+
+# Node
+**/node_modules
+**/.pnpm-store
+**/dist
+
+# Generated or OS noise
+**/.idea
+**/.vscode
+**/.next
+**/.turbo
+**/*.log

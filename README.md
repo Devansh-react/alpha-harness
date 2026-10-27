@@ -9,3 +9,14 @@
    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=residual-lab/alpha-harness&type=date&legend=bottom-right" />
  </picture>
 </a>
+
+## Docker
+
+This project serves the built frontend directly from the backend, so the container runs on a single port: 8000.
+
+```bash
+docker compose up --build
+```
+
+Then open http://localhost:8000.
+
